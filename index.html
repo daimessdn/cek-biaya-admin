@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ini jsplumb demo</title>
+
+    <style>
+      html,
+      body {
+        margin: 0;
+      }
+
+      .item {
+        padding: 6px 12px;
+        background-color: #fff;
+        color: #222;
+        font-size: 12px;
+        line-height: 24px;
+        font-family: "DM Sans", sans-serif;
+        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+
+        user-select: none;
+        cursor: move;
+
+        position: absolute !important;
+        border-radius: 20px;
+      }
+
+      .menu {
+        position: absolute;
+        top: -15px;
+        left: 0;
+        padding: 4px;
+
+        background-color: orange;
+      }
+
+      #tooltip {
+        position: absolute;
+        bottom: 8px;
+        right: 8px;
+
+        padding: 6px 12px;
+        background-color: #fff;
+        color: #222;
+        font-size: 12px;
+        line-height: 24px;
+        font-family: "DM Sans", sans-serif;
+        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+
+        border-radius: 6px;
+        /* display: ruby; */
+      }
+
+      #tooltip ul {
+        margin: 0;
+        padding: 0;
+        padding-left: 12px;
+      }
+    </style>
+  </head>
+  <body onload="load()">
+    <div
+      id="container"
+      style="
+        width: 100vw;
+        height: 100vh;
+        position: relative;
+        background-color: #ebebd3;
+        background-color: ;
+      "
+    >
+      <!-- <div id="item1" class="item">
+        <div class="item-inner">ini item 1</div>
+      </div>
+      <div id="item2" class="item">
+        <div class="item-inner">ini item 2</div>
+      </div>
+      <div id="item3" class="item" style="left: 200px">
+        <div class="item-inner">ini item 3</div>
+      </div> -->
+    </div>
+
+    <div id="tooltip">Hover garis untuk mengetahui status transfer.</div>
+
+    <script
+      src="https://code.jquery.com/jquery-3.6.0.min.js"
+      integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+      crossorigin="anonymous"
+    ></script>
+
+    <link
+      rel="stylesheet"
+      href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css"
+    />
+    <script
+      src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"
+      integrity="sha256-lSjKY0/srUM9BE3dPm+c4fBo1dky2v27Gdjm2uoZaL0="
+      crossorigin="anonymous"
+    ></script>
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jsPlumb/2.15.6/js/jsplumb.min.js"
+      integrity="sha512-yGgPLFnBGQP4L4+2eTbGj0uLoq+CLXmP2+c/hXWdmLYB9jEBfVGjxIqtvFneLCKATOZhDf2YPYG4uSEksWXp+g=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script>
+      const menu = (id) => `
+        <div class="menu">
+            <button onclick="document.querySelector('.menu').remove(); alert('membuka menu edit ${id}')">edit</button>
+        </div>
+      `;
+
+      const SOURCE_TARGET_CONFIG = {
+        connector: ["Flowchart", { cornerRadius: 10, stub: 16 }],
+        endpointStyle: { radius: 3 },
+      };
+
+      let instance = jsPlumb.getInstance({
+        container: "#container",
+      });
+
+      $(".item").resizable({
+        grid: [20, 20],
+        resize: (event, ui) => {
+          instance.repaintEverything();
+        },
+      });
+
+      // instance.draggable("item1", {
+      //   grid: [20, 20],
+      //   containment: "parent",
+      // });
+
+      // instance.draggable("item2", {
+      //   grid: [20, 20],
+      //   containment: "parent",
+      // });
+
+      // instance.bind("ready", () => {
+      //   instance.connect({
+      //     source: "item1",
+      //     target: "item2",
+      //     anchor: ["Continuous", { shape: "Circle" }],
+      //     connector: ["Flowchart", { cornerRadius: 10, stub: 16 }],
+      //     endpoint: "Blank",
+      //     endpointStyle: { radius: 3 },
+      //     overlays: [["Arrow", { location: 1, width: 10, length: 10 }]],
+      //     hoverPaintStyle: {
+      //       strokeWidth: 1.5,
+      //       stroke: "#aaa",
+      //     },
+      //     paintStyle: { stroke: "#222", strokeWidth: 1 },
+      //   });
+
+      // instance.makeTarget(`item3`, SOURCE_TARGET_CONFIG);
+      // instance.makeSource(`item3`, SOURCE_TARGET_CONFIG);
+
+      //   $("#item1").on("mouseover", (e) => {
+      //     console.log("ini item 1 hovered");
+      //     if ($(".menu").length === 0) {
+      //       $("#item1 .item-inner").html(
+      //         $("#item1 .item-inner").html() + menu("item1")
+      //       );
+      //     }
+      //   });
+
+      //   $("#item1").on("mouseleave", (e) => {
+      //     $(".menu").remove();
+      //   });
+
+      //   $("#item1 .menu").on("mouseleave", (e) => {
+      //     $(".menu").remove();
+      //   });
+      // });
+
+      const data = {
+        objects: [
+          { name: "GoPay", id: "gopay" },
+          { name: "Bank Jago", id: "bank_jago" },
+          { name: "SeaBank", id: "seabank" },
+          { name: "neobank", id: "neobank" },
+          { name: "ShopeePay", id: "shopeepay" },
+        ],
+        connection: [
+          { source: "neobank", target: "seabank", type: "free" },
+          {
+            source: "seabank",
+            target: "neobank",
+            type: "semifree",
+            notes: ["Ada kuota gratis biaya transfer hingga 100x per bulan"],
+          },
+          {
+            source: "seabank",
+            target: "bank_jago",
+            type: "semifree",
+            notes: ["Ada kuota gratis biaya transfer hingga 100x per bulan"],
+          },
+          {
+            source: "seabank",
+            target: "gopay",
+            type: "semifree",
+            notes: ["Ada kuota gratis biaya transfer hingga 100x per bulan"],
+          },
+          {
+            source: "neobank",
+            target: "gopay",
+            type: "not-free",
+            notes: ["Biaya tambahan 1.500"],
+          },
+          { source: "bank_jago", target: "gopay", type: "free" },
+          {
+            source: "bank_jago",
+            target: "shopeepay",
+            type: "not-free",
+            notes: [
+              "Ada kuota gratis transfer hingga 25x per bulan",
+              "Ada pemotongan saldo 500 dari Shopee",
+            ],
+          },
+          {
+            source: "bank_jago",
+            target: "seabank",
+            type: "semifree",
+            notes: ["Ada kuota gratis transfer hingga 25x per bulan"],
+          },
+          { source: "gopay", target: "bank_jago", type: "free" },
+          { source: "seabank", target: "shopeepay", type: "free" },
+          { source: "shopeepay", target: "seabank", type: "free" },
+        ],
+      };
+
+      // fungsi buat generate instance
+      const generateObject = (object) => {
+        return `
+        <div id="${object.id}" class="item">
+          <div class="item-inner">${object.name}</div>
+        </div>
+        `;
+      };
+
+      // fungsi buat ngeload semua data dan koneksi
+      const load = () => {
+        // generate semua object
+        data.objects.forEach((x, i) => {
+          const generatedObject = $(generateObject(x)).appendTo("#container");
+
+          // make all objects draggable
+          instance.draggable(x.id, { containment: "parent" });
+        });
+
+        // hubungkan semua object
+        data.connection.forEach((x, i) => {
+          instance.connect({
+            source: x.source,
+            target: x.target,
+            anchor: ["Continuous", { shape: "Circle" }],
+            endpoint: "Blank",
+            endpointStyle: { radius: 3 },
+            overlays: [["Arrow", { location: 1, width: 10, length: 10 }]],
+            hoverPaintStyle: {
+              strokeWidth: 1.5,
+              stroke: "#ddd",
+            },
+            paintStyle: {
+              stroke:
+                x.type === "free"
+                  ? "#71B340"
+                  : x.type === "semifree"
+                  ? "#FABC3C"
+                  : "#F19143",
+              strokeWidth: 1.5,
+            },
+          });
+        });
+      };
+
+      instance.bind("ready", () => {
+        instance.bind("mouseover", (component, event) => {
+          // console.log(component);
+          const connection = getConnection(
+            component.sourceId,
+            component.targetId
+          );
+
+          $("#tooltip").html(`
+            Dari ${component.source.innerText} ke ${
+            component.target.innerText
+          } ${
+            connection.type === "free"
+              ? "gratis biaya admin"
+              : connection.type === "semifree"
+              ? "gratis admin dengan catatan"
+              : "ada tambahan biaya"
+          }.
+          ${
+            connection.notes !== undefined
+              ? `
+              <br />
+              <ul>
+                ${connection.notes
+                  .map((note, noteIndex) => {
+                    return `<li>${note}</li>`;
+                  })
+                  .join("")}
+              </ul>
+            `
+              : ""
+          }`);
+        });
+      });
+
+      const getConnection = (a, b) => {
+        return data.connection.filter(
+          (x) => x.source === a && x.target === b
+        )[0];
+      };
+
+      instance.bind("mouseleave", () => {
+        $("#tooltip").html("Hover garis untuk mengetahui status transfer.");
+      });
+    </script>
+  </body>
+</html>
