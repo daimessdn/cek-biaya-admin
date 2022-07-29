@@ -183,6 +183,8 @@
           { name: "SeaBank", id: "seabank" },
           { name: "neobank", id: "neobank" },
           { name: "ShopeePay", id: "shopeepay" },
+          { name: "OVO", id: "ovo" },
+          { name: "DANA", id: "dana" },
         ],
         connection: [
           { source: "neobank", target: "seabank", type: "free" },
@@ -201,6 +203,12 @@
           {
             source: "seabank",
             target: "gopay",
+            type: "semifree",
+            notes: ["Ada kuota gratis biaya transfer hingga 100x per bulan"],
+          },
+          {
+            source: "seabank",
+            target: "dana",
             type: "semifree",
             notes: ["Ada kuota gratis biaya transfer hingga 100x per bulan"],
           },
@@ -229,6 +237,60 @@
           { source: "gopay", target: "bank_jago", type: "free" },
           { source: "seabank", target: "shopeepay", type: "free" },
           { source: "shopeepay", target: "seabank", type: "free" },
+          {
+            source: "bank_jago",
+            target: "ovo",
+            type: "semifree",
+            notes: ["Ada kuota gratis transfer hingga 25x per bulan"],
+          },
+          {
+            source: "bank_jago",
+            target: "dana",
+            type: "semifree",
+            notes: ["Ada kuota gratis transfer hingga 25x per bulan"],
+          },
+          {
+            source: "seabank",
+            target: "ovo",
+            type: "semifree",
+            notes: ["Ada kuota gratis transfer hingga 100x per bulan"],
+          },
+          {
+            source: "neobank",
+            target: "ovo",
+            type: "not-free",
+            notes: [
+              "Ada tambahan biaya 1.500 ketika topup dari NeoBank",
+              "Ada potongan saldo 1.000 dari OVO",
+            ],
+          },
+          {
+            source: "dana",
+            target: "bank_jago",
+            type: "semifree",
+            notes: [
+              "Ada kuota gratis biaya admin hingga 10x per bulan",
+              "Gratis biaya admin berlaku untuk transfer minimal 50.000",
+            ],
+          },
+          {
+            source: "dana",
+            target: "seabank",
+            type: "semifree",
+            notes: [
+              "Ada kuota gratis biaya admin hingga 10x per bulan",
+              "Gratis biaya admin berlaku untuk transfer minimal 50.000",
+            ],
+          },
+          {
+            source: "dana",
+            target: "neobank",
+            type: "semifree",
+            notes: [
+              "Ada kuota gratis biaya admin hingga 10x per bulan",
+              "Gratis biaya admin berlaku untuk transfer minimal 50.000",
+            ],
+          },
         ],
       };
 
@@ -245,7 +307,12 @@
       const load = () => {
         // generate semua object
         data.objects.forEach((x, i) => {
-          const generatedObject = $(generateObject(x)).appendTo("#container");
+          const generatedObject = $(generateObject(x))
+            .appendTo("#container")
+            .css({
+              top: Math.random() * window.innerHeight + "px",
+              left: Math.random() * window.innerWidth + "px",
+            });
 
           // make all objects draggable
           instance.draggable(x.id, { containment: "parent" });
@@ -258,11 +325,12 @@
             target: x.target,
             anchor: ["Continuous", { shape: "Circle" }],
             endpoint: "Blank",
+            connector: "StateMachine",
             endpointStyle: { radius: 3 },
             overlays: [["Arrow", { location: 1, width: 10, length: 10 }]],
             hoverPaintStyle: {
               strokeWidth: 1.5,
-              stroke: "#ddd",
+              stroke: "#222",
             },
             paintStyle: {
               stroke:
